@@ -20,6 +20,9 @@ async function connect(){
 connect();
 
 //routes
+app.get('/', (req, res) => {
+    res.send("<h1>PIN-IT-API</h1>")
+})
 app.use('/api/pins', pinRouter)
 app.use('/api/users', usersRouter)
 
