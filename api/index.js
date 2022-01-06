@@ -5,6 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const pinRouter = require('./routes/pins');
+const usersRouter = require('./routes/users');
 
 app.use(express.json())
 
@@ -20,5 +21,6 @@ connect();
 
 //routes
 app.use('/api/pins', pinRouter)
+app.use('/api/users', usersRouter)
 
 app.listen(PORT, ()=> console.log(`Server running on ${PORT}`))

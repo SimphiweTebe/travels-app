@@ -1,35 +1,14 @@
 const router = require('express').Router();
-const User = require('../models/User')
+const {registerUser, loginUser, getAllUsers} = require('../controllers/userController')
+
 
 //Register
-router.post("/", async (req, res) => {
-    const newPin = new Pin(req.body);
-    try {
-        const savedPin = await newPin.save()
-        res.status(201).json(savedPin)
-    } catch (error) {
-        res.status(500).json(error)
-    }
-})
+router.post("/register", registerUser)
 
 //Login
-router.get('/', async (req,res)=> {
-    try {
-        const pins = await Pin.find();
-        res.status(200).json(pins)
-    } catch (error) {
-        res.status(500).json(error)
-    }
-})
+router.post('/login', loginUser)
 
 //Get Users
-router.get('/', async (req,res)=> {
-    try {
-        const pins = await Pin.find();
-        res.status(200).json(pins)
-    } catch (error) {
-        res.status(500).json(error)
-    }
-})
+router.get('/', getAllUsers)
 
 module.exports = router;
