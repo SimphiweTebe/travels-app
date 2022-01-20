@@ -1,30 +1,37 @@
-.card{
-    padding: 15px 10px;
-    min-width: 250px;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+.add{
+    
+    padding: 20px;
 
-    h5{
-        color: tomato;
-        font-size: 1.3rem;
-        border-bottom: .5px solid tomato;
-        width: fit-content;
-    }
-    p{
-        font-size: 1.3rem;
-    }
-    .star{
-        color: gold;
-    }
-    .information{
-        font-size: 13px;
+    form{
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        min-width: 250px;
+        min-height: 220px;
+        
+        label{
+            color: tomato;
+            font-weight: 500;
+        }
 
-        .date{
-            color: lightslategray;
+        input::placeholder, textarea::placeholder{
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: #999;
+        }
+
+        input{
+            border-bottom: 1px solid tomato;
+            padding-bottom: 3px;
+        }
+        textarea{
+            border-bottom: 1px solid tomato;
+        }
+        .submit-btn{
+            background-color: tomato;
+            color: #fff;
+            padding: 10px 10px;
+            font-weight: 600;
+            font-size: 13px;
         }
     }
 }

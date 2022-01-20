@@ -1,0 +1,30 @@
+.card{
+    padding: 15px 10px;
+    min-width: 250px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    h5{
+        color: tomato;
+        font-size: 1.3rem;
+        border-bottom: .5px solid tomato;
+        width: fit-content;
+    }
+    p{
+        font-size: 1.3rem;
+    }
+    .star{
+        color: gold;
+    }
+    .information{
+        font-size: 13px;
+        display: flex;
+        flex-direction: column;
+
+        .date{
+            color: lightslategray;
+        }
+    }
+}

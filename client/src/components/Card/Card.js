@@ -1,6 +1,7 @@
 import React from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { format} from 'timeago.js'
+import './card.scss';
 
 function Card({pin}) {
   return (

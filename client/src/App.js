@@ -44,6 +44,7 @@ function App() {
                 onViewportChange={nextViewport => setViewport(nextViewport)}
                 mapStyle="mapbox://styles/simphiwetebe/ckylxwdqienf616n2o6l6b735"
                 onDblClick={handleAddClick}
+                transitionDuration="200"
             >
                 {
                     pins.length > 0 && pins.map(p => (
@@ -87,8 +88,22 @@ function App() {
                                         onClose={()=> setNewPlace(null)}
                                         anchor="left" 
                                     >
-                                        <div className="forms">
-                                            <h3>Hello from form</h3>
+                                        <div className="add">
+                                            <form className="add-form">
+                                                <label>Title:</label>
+                                                <input type="text" name="title" placeholder='Enter a title' />
+                                                <label>Review:</label>
+                                                <textarea name="desc" placeholder='Say something about this place.' />
+                                                <label>Rating:</label>
+                                                <select>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                                <button className="submit-btn">Add Pin</button>
+                                            </form>
                                         </div>
                                     </Popup>
                                 )
