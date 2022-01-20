@@ -3,15 +3,15 @@ import ReactMapGL, {Marker, Popup} from 'react-map-gl';
 import { useSelector, useDispatch } from 'react-redux'
 import { getPins } from './redux/actions/pinActions';
 import {FaMapMarkerAlt} from 'react-icons/fa';
-import { AiFillStar } from 'react-icons/ai';
 import { scaleToZoom } from 'viewport-mercator-project';
-import { format} from 'timeago.js'
+import Card from './components/Card/Card';
 
 function App() {
 
     const pins = useSelector(state => state.pins);
+    const currentUser = "Zama";
     const dispatch = useDispatch();
-
+    const [newPlace, setNewPlace] = useState(null);
     const [viewport, setViewport] = useState({
         width: "100vw",
         height: "100vh",
@@ -26,8 +26,14 @@ function App() {
           dispatch(getPins())
       },[])
 
-      const handleMarkerClick = id => {
-          setCurrentPlaceId(id)
+      const handleMarkerClick = (id,lat,long) => {
+          setCurrentPlaceId(id);
+          setViewport({...viewport, latitude: lat, longitude: long})
+      }
+
+      const handleAddClick = (e)=> {
+          const [long, lat] = e.lngLat;
+          setNewPlace({lat, long});
       }
 
     return (
@@ -37,52 +43,56 @@ function App() {
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
                 onViewportChange={nextViewport => setViewport(nextViewport)}
                 mapStyle="mapbox://styles/simphiwetebe/ckylxwdqienf616n2o6l6b735"
+                onDblClick={handleAddClick}
             >
                 {
                     pins.length > 0 && pins.map(p => (
                         <div className='pin' key={p._id}>
-                        <Marker 
-                        latitude={p.lat} 
-                        longitude={p.long} 
-                        offsetLeft={-20} 
-                        offsetTop={-10}>
-                        <FaMapMarkerAlt style={{
-                            transform: `scale(${viewport.zoom / 5})`,
-                            color: '#FF0000',
-                            cursor: 'pointer'
-                        }}
-                        onClick={(id) => handleMarkerClick(p._id)}
-                        />
-                    </Marker>
-                    {p._id === currentPlaceId && (
-                        <Popup
-                        latitude={p.lat} 
-                        longitude={p.long} 
-                        closeButton={true}
-                        closeOnClick={false}
-                        onClose={()=> setCurrentPlaceId(null)}
-                        anchor="left" >
-                        <div className="card">
-                            <h5>Place:</h5>
-                            <p>{p.title}</p>
-                            <h5>Review:</h5>
-                            <p className="review">{p.desc}</p>
-                            <h5>Rating:</h5>
-                            <span className="rating">
-                                <AiFillStar className='star' />
-                                <AiFillStar className='star' />
-                                <AiFillStar className='star' />
-                                <AiFillStar className='star' />
-                                <AiFillStar  className='star'/>
-                            </span>
-                            <h5>Information:</h5>
-                            <p className="information">
-                                <span className='username'>Created by: <b>{p.username}</b>
-                                </span> <span className='date'>{format(p.createdAt)}</span>
-                            </p>
-                        </div>
-                    </Popup>
-                    )}
+                            {/* custome marker */}
+                            <Marker 
+                                latitude={p.lat} 
+                                longitude={p.long} 
+                                offsetLeft={-20} 
+                                offsetTop={-10}
+                            >
+                            <FaMapMarkerAlt style={{
+                                transform: `scale(${viewport.zoom / 5})`,
+                                color: p.username === currentUser ? "tomato" : "slateBlue",
+                                cursor: 'pointer',
+                                }}
+                                onClick={(id) => handleMarkerClick(p._id,p.lat,p.long)}
+                            />
+                            </Marker>
+                            {/* popup logic for clicked marker */}
+                            {p._id === currentPlaceId && (
+                                <Popup
+                                latitude={p.lat} 
+                                longitude={p.long} 
+                                closeButton={true}
+                                closeOnClick={false}
+                                onClose={()=> setCurrentPlaceId(null)}
+                                anchor="left" 
+                                >
+                                    <Card pin={p}/>
+                                </Popup>
+                            )}
+                            {/* popup logic for adding place */}
+                            {
+                                newPlace && (
+                                    <Popup
+                                        latitude={newPlace.lat} 
+                                        longitude={newPlace.long} 
+                                        closeButton={true}
+                                        closeOnClick={false}
+                                        onClose={()=> setNewPlace(null)}
+                                        anchor="left" 
+                                    >
+                                        <div className="forms">
+                                            <h3>Hello from form</h3>
+                                        </div>
+                                    </Popup>
+                                )
+                            }
                         </div>
                     ))
                 }
