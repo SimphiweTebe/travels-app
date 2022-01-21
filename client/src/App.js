@@ -1,17 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import ReactMapGL, {Marker, Popup} from 'react-map-gl';
 import { useSelector, useDispatch } from 'react-redux'
-import { getPins } from './redux/actions/pinActions';
+import { createPin } from './redux/actions/pinActions';
 import {FaMapMarkerAlt} from 'react-icons/fa';
-import { scaleToZoom } from 'viewport-mercator-project';
 import Card from './components/Card/Card';
+import axios from 'axios';
 
 function App() {
 
-    const pins = useSelector(state => state.pins);
+    const user = useSelector(state => state.user);
     const currentUser = "Zama";
     const dispatch = useDispatch();
+
+    const [pins, setPins] = useState([]);
     const [newPlace, setNewPlace] = useState(null);
+    const [pinData, setPinData] = useState({
+        title: '',
+        desc: '',
+        rating: ''
+    })
     const [viewport, setViewport] = useState({
         width: "100vw",
         height: "100vh",
@@ -19,11 +26,15 @@ function App() {
         longitude: 18.677778,
         zoom: 10
       });
-
       const [currentPlaceId, setCurrentPlaceId] = useState(null);
 
       useEffect(()=>{
-          dispatch(getPins())
+          const loadPins = async ()=>{
+              const res = await axios.get('/pins');
+              setPins(res.data)
+          }
+        
+        loadPins()
       },[])
 
       const handleMarkerClick = (id,lat,long) => {
@@ -34,6 +45,29 @@ function App() {
       const handleAddClick = (e)=> {
           const [long, lat] = e.lngLat;
           setNewPlace({lat, long});
+      }
+
+      const handleReviewInputs = (e) => {
+          setPinData({...pinData, [e.target.name]: e.target.value})
+      }
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const newPin = {
+            ...pinData, 
+            username: currentUser,
+            lat: newPlace.lat,
+            long: newPlace.long
+        }
+        
+        try{
+            dispatch(createPin(newPin));
+            setPins([...pins, newPin])
+            setNewPlace(null)
+        }catch(err){
+            console.log(err);
+        }
       }
 
     return (
@@ -53,8 +87,8 @@ function App() {
                             <Marker 
                                 latitude={p.lat} 
                                 longitude={p.long} 
-                                offsetLeft={-20} 
-                                offsetTop={-10}
+                                offsetLeft={-viewport.zoom / 2.5} 
+                                offsetTop={-viewport.zoom / 5}
                             >
                             <FaMapMarkerAlt style={{
                                 transform: `scale(${viewport.zoom / 5})`,
@@ -89,13 +123,13 @@ function App() {
                                         anchor="left" 
                                     >
                                         <div className="add">
-                                            <form className="add-form">
+                                            <form className="add-form" onSubmit={handleSubmit}>
                                                 <label>Title:</label>
-                                                <input type="text" name="title" placeholder='Enter a title' />
+                                                <input type="text" name="title" placeholder='Enter a title' onChange={handleReviewInputs}/>
                                                 <label>Review:</label>
-                                                <textarea name="desc" placeholder='Say something about this place.' />
+                                                <textarea name="desc" placeholder='Say something about this place.' onChange={handleReviewInputs}/>
                                                 <label>Rating:</label>
-                                                <select>
+                                                <select name="rating" onChange={handleReviewInputs}>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
@@ -106,11 +140,15 @@ function App() {
                                             </form>
                                         </div>
                                     </Popup>
-                                )
-                            }
+                                )}
                         </div>
                     ))
                 }
+                <div className="nav-bar">
+                    <button>Log out</button>
+                    <button>Login</button>
+                    <button>Register</button>
+                </div>
             </ReactMapGL>
         </div>
     )

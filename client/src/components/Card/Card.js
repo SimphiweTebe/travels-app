@@ -12,11 +12,9 @@ function Card({pin}) {
             <p className="review">{pin.desc}</p>
             <h5>Rating:</h5>
             <span className="rating">
-                <AiFillStar className='star' />
-                <AiFillStar className='star' />
-                <AiFillStar className='star' />
-                <AiFillStar className='star' />
-                <AiFillStar  className='star'/>
+                {
+                    Array(pin.rating).fill(<AiFillStar className='star' />)
+                }
             </span>
             <h5>Information:</h5>
             <p className="information">
