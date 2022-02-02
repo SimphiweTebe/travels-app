@@ -2,16 +2,18 @@ import React, {useState, useEffect} from 'react';
 import ReactMapGL, {Marker, Popup} from 'react-map-gl';
 import { useSelector, useDispatch } from 'react-redux'
 import { createPin } from './redux/actions/pinActions';
-import {FaMapMarkerAlt} from 'react-icons/fa';
+import { logOut } from './redux/actions/userActions';
+import {FaMapMarkerAlt, FaCompass} from 'react-icons/fa';
 import Card from './components/Card/Card';
 import axios from 'axios';
+import Forms from './components/Forms/Forms';
 
 function App() {
 
     const user = useSelector(state => state.user);
-    const currentUser = "Zama";
     const dispatch = useDispatch();
 
+    const [currentUser, setCurrentUser] = useState(null);
     const [pins, setPins] = useState([]);
     const [newPlace, setNewPlace] = useState(null);
     const [pinData, setPinData] = useState({
@@ -33,9 +35,11 @@ function App() {
               const res = await axios.get('/pins');
               setPins(res.data)
           }
+
+          setCurrentUser(user.username);
         
         loadPins()
-      },[])
+      },[user])
 
       const handleMarkerClick = (id,lat,long) => {
           setCurrentPlaceId(id);
@@ -47,8 +51,8 @@ function App() {
           setNewPlace({lat, long});
       }
 
-      const handleReviewInputs = (e) => {
-          setPinData({...pinData, [e.target.name]: e.target.value})
+      const handleReviewInputs = async (e) => {
+        setPinData({...pinData, [e.target.name]: e.target.value})
       }
 
       const handleSubmit = async (e) => {
@@ -145,10 +149,23 @@ function App() {
                     ))
                 }
                 <div className="nav-bar">
-                    <button>Log out</button>
-                    <button>Login</button>
-                    <button>Register</button>
+                    <div className="logo">
+                        <span><FaCompass className='icon'/></span>
+                        <span>Tripshare</span>
+                    </div>
+
+                    {
+                        Object.entries(user).length !== 0 ? (<button onClick={()=> dispatch(logOut())}>Log out</button>) 
+                        : (
+                        <>
+                            <p>You must be logged in to post a trip</p>
+                        </>
+                        )
+                    }
                 </div>
+                {
+                    Object.entries(user).length === 0 && <Forms />
+                }
             </ReactMapGL>
         </div>
     )

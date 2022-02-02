@@ -13,7 +13,7 @@ const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const newUser = await User.create({username, email, password: hashedPassword})
-        res.status(201).json(newUser)
+        res.status(201).json({ _id: newUser._id, username: newUser.username })
     } catch (error) {
         res.status(400).json({ message: error })
         console.log(error);

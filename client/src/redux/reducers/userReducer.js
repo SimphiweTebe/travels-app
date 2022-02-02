@@ -1,21 +1,22 @@
-import { REGISTER_USERS, LOGIN_USERS, LOGOUT_USERS, GET_ALL_USERS } from '../types';
+import { REGISTER_USER, LOGIN_USER, LOGOUT_USER } from '../types';
 
 const defaultState = {
-    isAuth: false,
-    jwt: null,
-    data: null
+    
 }
 
-function userReducer(state = defaultState, action){
+const user = JSON.parse(localStorage.getItem('user')) || defaultState;
+
+function userReducer(state = user, action){
     switch(action.type){
 
-        case REGISTER_USERS:
+        case REGISTER_USER:
+            console.log('Received user action');
             return {...state, data: action.payload };
 
-        case LOGIN_USERS:
+        case LOGIN_USER:
             return {...state, data: action.payload };
 
-        case LOGOUT_USERS:
+        case LOGOUT_USER:
             return state;
 
         default:
