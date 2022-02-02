@@ -37,9 +37,8 @@ function App() {
           }
 
           setCurrentUser(user.username);
-        
-        loadPins()
-      },[user])
+          loadPins()
+      },[user, pins])
 
       const handleMarkerClick = (id,lat,long) => {
           setCurrentPlaceId(id);

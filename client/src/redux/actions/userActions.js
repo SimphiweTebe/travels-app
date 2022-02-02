@@ -15,7 +15,6 @@ export const loginUser = (user) => async (dispatch) => {
         const res = await api.loginUser(user);
         dispatch({ type: LOGIN_USER, payload: res.data })
         localStorage.setItem('user', JSON.stringify(res.data))
-        console.log("login action: ", res.data);
     } catch (error) {
         console.log(error);
     }
