@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://map-it-api.herokuapp.com/api';
 
 export const createNewPin = (newPin) => axios.post(`${BASE_URL}/pins`, newPin);
 export const getAllPins = () => axios.get(`${BASE_URL}/pins`);

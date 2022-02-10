@@ -7,7 +7,6 @@ import { registerUser, loginUser } from '../../redux/actions/userActions';
 function Forms() {
     const dispatch = useDispatch();
     const [errors, setErrors] = useState(null);
-    const [success, setSuccess] = useState(false);
     const[isRegister, setRegister] = useState(true);
     const [user, setUser] = useState({ 
         email: '',
